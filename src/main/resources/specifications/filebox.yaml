@@ -1,0 +1,74 @@
+openapi: 3.0.3
+
+info:
+  title: File Manager API Specification
+  description: Specification of File Manager to upload/download files.
+  version: 0.5.2
+tags:
+  - name: Filebox
+
+paths:
+  /upload/csv/{key}:
+    post:
+      tags:
+        - Filebox
+      summary: Upload a CSV file
+      parameters:
+        - name: key
+          description: Unique identifier of uploaded file
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: File uploaded successfully
+
+  /download/csv/{key}:
+    get:
+      tags:
+        - Filebox
+      summary: Download a CSV file
+      parameters:
+        - name: key
+          description: Unique identifier of uploaded file
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CSV file downloaded successfully
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: stream
+
+  /delete/csv/{key}:
+    delete:
+      tags:
+        - Filebox
+      summary: Delete a CSV file
+      parameters:
+        - name: key
+          description: Unique identifier of uploaded file
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: File deleted successfully
+        '400':
+          description: File was not found
